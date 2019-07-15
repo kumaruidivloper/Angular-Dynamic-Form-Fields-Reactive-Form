@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import { formControlBinding } from '@angular/forms/src/directives/ng_model';
 
 @Component({
   selector: 'app-root',
@@ -12,6 +13,7 @@ export class AppComponent implements OnInit {
   public contactList: FormArray;
   public positionList: FormArray;
   public country: string[] =  ['India', 'Singapore', 'England', 'Pakistan', 'UAE', 'South Africa'];
+  emails = [{ language: 'English' }, { language: 'Tamil' }, { language: 'Germany' }, { language: 'Spanish' }];
 
   // returns all form groups under contacts
   get contactFormGroup() {
@@ -46,7 +48,7 @@ export class AppComponent implements OnInit {
       value: [null, Validators.compose([Validators.required, Validators.email])],
       country: [''],
       gender: [''],
-      language: ['']
+      language: this.fb.array([])
     });
   }
 
@@ -134,6 +136,22 @@ export class AppComponent implements OnInit {
     // this.contactList = this.form.get('contacts') as FormArray;
     const formGroup = this.positionList.controls[index] as FormGroup;
     return formGroup;
+  }
+
+  onChange(language: string, isChecked: boolean) {
+    console.log(language);
+    // const emailFormArray = <FormArray>this.form.controls.useremail;
+    const CheckedValue = this.form.get('contacts').value as FormArray;
+    const emailFormArray = CheckedValue[0].language;
+    console.log(emailFormArray);
+    if (isChecked) {
+      emailFormArray.push(language);
+      console.log(emailFormArray);
+    } else {
+      const index = emailFormArray.indexOf(language);
+      console.log(index);
+      emailFormArray.splice(index, 1);
+    }
   }
 
   // method triggered when form is submitted

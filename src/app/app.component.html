@@ -77,12 +77,16 @@
                             <br><br>
                             <label>Language Known</label>
                             <br>
-                            <div class="form-check-inline">
+                            <div class="form-check-inline" *ngFor="let data of emails">
+                              <input type="checkbox" (change)="onChange(data.language, $event.target.checked)"> {{data.language}}<br>
+                            </div>
+                            <!-- <pre>Form values: {{form.value | json}}</pre> -->
+                            <!-- <div class="form-check-inline">
                                 <label class="form-check-label" for="English">
                                   <input type="checkbox" formControlName="language" class="form-check-input" id="check1" name="language" value="English">English
                                 </label>
-                              </div>
-                              <div class="form-check-inline">
+                              </div> -->
+                              <!-- <div class="form-check-inline">
                                 <label class="form-check-label" for="Tamil">
                                   <input type="checkbox" formControlName="language" class="form-check-input" id="check2" name="language" value="Tamil">Tamil
                                 </label>
@@ -91,7 +95,7 @@
                                 <label class="form-check-label" for="German">
                                   <input type="checkbox" formControlName="language" class="form-check-input" id="check3" name="language" value="German">German
                                 </label>
-                              </div>
+                              </div> -->
                         </div>
 
                         
