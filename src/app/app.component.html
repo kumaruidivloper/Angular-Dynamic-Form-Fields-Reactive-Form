@@ -1,166 +1,19 @@
-<!--The content below is only a placeholder and can be replaced.--><nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <a class="navbar-brand" href="#">Angular <b>Dynamic Form</b></a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-</nav>
-
-<div class="container p-3">
-  <div class="row">
-    <div class="col-12">
-      <form [formGroup]="form" (submit)="submit()">
-        <div class="card">
-          <div class="card-header">User Profile</div>
-          <div class="card-body">
-            <div class="row">
-              <div class="form-group col-6">
-                <label>Name</label>
-                <input class="form-control" formControlName="name" type="text">
-                <span class="text-danger" *ngIf="form.controls['name'].touched && form.controls['name'].hasError('required')">
-                  Name is required! </span>
-              </div>
-              <div class="form-group col-6">
-                <label>Organization</label>
-                <input class="form-control" formControlName="organization" type="text">
-              </div>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-6">
-                <!--Contact Information Form Start-->
-                <div class="card-header" *ngIf="contactList.length >= 1">Contact Information</div>
-                <div class="card-body" formArrayName="contacts">
-                  <div class="row">
-                    <div class="col-12" *ngFor="let contact of contactFormGroup.controls; let i = index;">
-                      <div [formGroupName]="i" class="row">
-                        <div class="form-group col-6">
-                          <label>Type of Contact</label>
-                          <select (change)="changedFieldContactType(i)" class="form-control" formControlName="type" type="text">
-                            <option value="email">Email</option>
-                            <option value="phone">Phone</option>
-                          </select>
-                        </div>
-                        <div class="form-group col-6">
-                          <label>Contact Label</label>
-                          <input class="form-control" formControlName="name" type="text">
-                          <span class="text-danger" *ngIf="getContactsFormGroup(i).controls['name'].touched && getContactsFormGroup(i).controls['name'].hasError('required')">
-                            Label is required! </span>
-                        </div>
-
-                        <div class="form-group col-12">
-                          <label>Email/Phone No.</label>
-                          <input class="form-control" formControlName="value" type="text">
-                          <span class="text-danger" *ngIf="getContactsFormGroup(i).controls['value'].touched && getContactsFormGroup(i).controls['value'].hasError('required')">
-                            Email/Phone no is required! </span>
-                          <span class="text-danger" *ngIf="getContactsFormGroup(i).controls['value'].touched && getContactsFormGroup(i).controls['value'].hasError('email')">
-                            Email is not valid! </span>
-                          <span class="text-danger" *ngIf="getContactsFormGroup(i).controls['value'].touched && getContactsFormGroup(i).controls['value'].hasError('pattern')">
-                            Phone no. is not valid! </span>
-                          <label>Country</label>
-                          <select class="form-control" formControlName="country">
-                              <option value="">---Please Select the Coutry---</option>
-                            <option value="{{countries}}" *ngFor="let countries of country">{{countries}}</option>
-                          </select>
-                          <label>Gender</label>
-                          <br>
-                          <div class="form-check-inline">
-                              <label class="form-check-label" for="radio1">
-                                <input type="radio" formControlName="gender" class="form-check-input" id="radio1" name="gender" value="Male" checked>Male
-                              </label>
-                            </div>
-                            <div class="form-check-inline">
-                              <label class="form-check-label" for="radio2">
-                                <input type="radio" formControlName="gender" class="form-check-input" id="radio2" name="gender" value="Female">Female
-                              </label>
-                            </div>
-                            <br><br>
-                            <label>Language Known</label>
-                            <br>
-                            <div class="form-check-inline" *ngFor="let data of emails">
-                              <input type="checkbox" (change)="onChange(data.language, $event.target.checked)"> {{data.language}}<br>
-                            </div>
-                            <!-- <pre>Form values: {{form.value | json}}</pre> -->
-                            <!-- <div class="form-check-inline">
-                                <label class="form-check-label" for="English">
-                                  <input type="checkbox" formControlName="language" class="form-check-input" id="check1" name="language" value="English">English
-                                </label>
-                              </div> -->
-                              <!-- <div class="form-check-inline">
-                                <label class="form-check-label" for="Tamil">
-                                  <input type="checkbox" formControlName="language" class="form-check-input" id="check2" name="language" value="Tamil">Tamil
-                                </label>
-                              </div>
-                              <div class="form-check-inline">
-                                <label class="form-check-label" for="German">
-                                  <input type="checkbox" formControlName="language" class="form-check-input" id="check3" name="language" value="German">German
-                                </label>
-                              </div> -->
-                        </div>
-
-                        
-                        <div class="form-group col-12 text-right">
-                          <button class="btn btn-danger" type="button" (click)="removeContact(i)"> Remove </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <!--Contact Information Form End-->
-            </div>
-          <div class="col-6">
-              <!--Postion Information Form Start-->
-              <div class="card-header" *ngIf="positionList.length >= 1">Postion Information</div>
-              <div class="card-body" formArrayName="position">
-                <div class="row">
-                  <div class="col-12" *ngFor="let position of positionFormGroup.controls; let i = index;">
-                    <div [formGroupName]="i" class="row">
-                      <div class="form-group col-6">
-                        <label>Type of Positon</label>
-                        <select (change)="changedFieldPositionType(i)" class="form-control" formControlName="type" type="text">
-                          <option value="email">Email</option>
-                          <option value="phone">Phone</option>
-                        </select>
-                      </div>
-                      <div class="form-group col-6">
-                        <label>Positon Label</label>
-                        <input class="form-control" formControlName="name" type="text">
-                        <span class="text-danger" *ngIf="getPositionFormGroup(i).controls['name'].touched && getPositionFormGroup(i).controls['name'].hasError('required')">
-                          Label is required! </span>
-                      </div>
-
-                      <div class="form-group col-12">
-                        <label>Email/Phone No.</label>
-                        <input class="form-control" formControlName="value" type="text">
-                        <span class="text-danger" *ngIf="getPositionFormGroup(i).controls['value'].touched && getPositionFormGroup(i).controls['value'].hasError('required')">
-                          Email/Phone no is required! </span>
-                        <span class="text-danger" *ngIf="getPositionFormGroup(i).controls['value'].touched && getPositionFormGroup(i).controls['value'].hasError('email')">
-                          Email is not valid! </span>
-                        <span class="text-danger" *ngIf="getPositionFormGroup(i).controls['value'].touched && getPositionFormGroup(i).controls['value'].hasError('pattern')">
-                          Phone no. is not valid! </span>
-                      </div>
-
-                      
-                      <div class="form-group col-12 text-right">
-                        <button class="btn btn-danger" type="button" (click)="removePostion(i)"> Remove </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <!--Postion Information Form End-->
-          </div>
-          </div>
-      
-          <div class="card-body">
-            <div class="col-12 text-right p-0">
-              <button class="btn btn-primary m-1" type="button" (click)="addPosition()"> Add Position </button>
-              <button class="btn btn-primary m-1" type="button" (click)="addContact()"> Add Contact </button>
-              <button class="btn btn-success m-1" [disabled]="!form.valid" type="submit"> Save User Profile </button>
-            </div>
-          </div>
-        </div>
-      </form>
-    </div>
-  </div>
+<div class="container">
+  <p>
+    <a href="https://coryrylan.com/blog/creating-a-dynamic-checkbox-list-in-angular">Dynamic Checkbox List with FormBuilder</a>
+    <br>
+    <a href='https://stackblitz.com/edit/angular-rskaug'>stackblitz</a>
+  </p>
+  
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <label formArrayName="orders" *ngFor="let order of form.controls.orders.controls; let i = index">
+      <input type="checkbox" [formControlName]="i">
+      {{orders[i].name}}
+    </label>
+  
+    <div *ngIf="!form.valid">At least one order must be selected</div>
+    <br>
+    <button [disabled]="!form.valid">submit</button>
+  </form>
 </div>
+
